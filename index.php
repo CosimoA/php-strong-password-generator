@@ -13,6 +13,10 @@
         .valid-password {
             color: green;
         }
+
+        p {
+            font-size: 1.2em;
+        }
     </style>
 </head>
 
@@ -21,18 +25,15 @@
     <h2>Generatore di Password</h2>
 
     <?php
+    // Inclusione file function
+    include 'functions.php';
+
     // Verifica se il modulo è stato inviato
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['length'])) {
         $lunghezzaPassword = filter_input(INPUT_GET, 'length', FILTER_VALIDATE_INT, ['options' => ['min_range' => 6, 'max_range' => 30]]);
 
         if ($lunghezzaPassword !== false) {
-            $caratteri = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=';
-            $password = '';
-
-            for ($i = 0; $i < $lunghezzaPassword; $i++) {
-                $password .= $caratteri[random_int(0, strlen($caratteri) - 1)];
-            }
-
+            $password = generatePassword($lunghezzaPassword);
             echo '<p class="valid-password">La tua password generata: <strong>' . $password . '</strong></p>';
         } else {
             echo '<p class="error-message">Inserisci una lunghezza della password valida (compresa tra 6 e 30 caratteri).</p>';
